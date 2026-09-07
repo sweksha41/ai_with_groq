@@ -1,3 +1,14 @@
+Prerequisit:
+Java 25
+
+Steps to run:
+- Import the pom.xml
+- mvn clean install
+- start the GroqDemoApplication
+- Hit any prompt in your browser 
+    Example: http://localhost:8080/api/groq/ask?prompt=what%20is%20chatgpt
+
+
 You can find the groq model accessible to you on groq portal
 
 <img width="295" height="500" alt="image" src="https://github.com/user-attachments/assets/8fb92839-b0a5-42d2-91a0-896df718fe9c" />
