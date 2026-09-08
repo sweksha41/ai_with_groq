@@ -1,5 +1,6 @@
 package com.learn.groq_demo.service;
 
+import com.learn.groq_demo.model.GroqResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -35,22 +36,9 @@ public class GroqService {
                 .header("Authorization", "Bearer " + apiKey)
                 .bodyValue(body)
                 .retrieve()
-                .bodyToMono(String.class);
-
-
-//        return webClient.post()
-//                .uri("/chat/completions")
-//                .header("Authorization", "Bearer " + apiKey)
-//                .bodyValue("""
-//                    {
-//                      "model": "%s",
-//                      "messages": [
-//                        { "role": "user", "content": "%s" }
-//                      ]
-//                    }
-//                    """.formatted(model, prompt))
-//                .retrieve()
-//                .bodyToMono(String.class);
-
+                .bodyToMono(GroqResponse.class)
+                .map(groqResponse ->
+                        groqResponse.choices().getFirst().message().content()
+                );
     }
 }
