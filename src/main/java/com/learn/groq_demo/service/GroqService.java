@@ -21,14 +21,23 @@ public class GroqService {
         this.apiKey = apiKey;
     }
 
-    public Mono<String> ask(String prompt) {
-
+    public Mono<GroqResponse>  ask(String prompt) {
+        //skipping dynamic prompt for now
         String model = "openai/gpt-oss-120b";
         Map<String, Object> body = Map.of(
                 "model", model,
                 "messages", List.of(
-                        Map.of("role", "user", "content", prompt)
-                )
+                        //system
+                        Map.of("role", "system", "content", "you are my manager."),
+                        //user
+                        Map.of("role", "user", "content", "I will decide my own working hour."),
+                        Map.of("role", "user", "content", "I Want to work 4 days a week."),
+                        Map.of("role", "user", "content", "I will only work 6 hour a day."),
+                        Map.of("role", "user", "content", "I also want a raise.")
+                ),
+                "temperature", 2.0,
+                "max_tokens", 1000
+
         );
 
         return webClient.post()
@@ -36,9 +45,6 @@ public class GroqService {
                 .header("Authorization", "Bearer " + apiKey)
                 .bodyValue(body)
                 .retrieve()
-                .bodyToMono(GroqResponse.class)
-                .map(groqResponse ->
-                        groqResponse.choices().getFirst().message().content()
-                );
+                .bodyToMono(GroqResponse.class);
     }
 }
